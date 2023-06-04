@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         if (savedInstanceState == null) {
-            router.newRootScreen(Screens.mainScreen())
+            router.newRootScreen(Screens.inputAddressScreen())
         }
     }
 

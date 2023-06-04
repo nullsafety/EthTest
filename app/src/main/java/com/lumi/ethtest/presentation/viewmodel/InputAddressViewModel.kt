@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import com.github.terrakok.cicerone.Router
 import org.bouncycastle.jcajce.provider.digest.Keccak
 
-class MainViewModel(private val router: Router) : ViewModel() {
+class InputAddressViewModel(private val router: Router) : ViewModel() {
 
-    val uiState: MainUiState = MainUiState()
+    val uiState: InputAddressUiState = InputAddressUiState()
 
     fun isValidAddress(address: String) =
         isValidEthereumAddress(address) && isValidAddressByChecksum(address)
@@ -46,6 +46,6 @@ class MainViewModel(private val router: Router) : ViewModel() {
     }
 
     fun onLoadClick() {
-        // TODO router.navigateTo() list
+        // TODO router.navigateTo(uiState.addressInput.value) list
     }
 }

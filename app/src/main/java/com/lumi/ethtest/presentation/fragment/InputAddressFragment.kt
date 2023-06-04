@@ -21,18 +21,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import com.github.terrakok.cicerone.Router
-import com.lumi.ethtest.presentation.viewmodel.MainViewModel
+import com.lumi.ethtest.presentation.viewmodel.InputAddressViewModel
 import com.lumi.ethtest.ui.theme.setAppThemeContent
 import org.koin.android.scope.AndroidScopeComponent
 import org.koin.androidx.scope.fragmentScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.scope.Scope
 
-class MainFragment : Fragment(), AndroidScopeComponent {
+class InputAddressFragment : Fragment(), AndroidScopeComponent {
 
     override val scope: Scope by fragmentScope()
 
-    private val viewModel: MainViewModel by viewModel()
+    private val viewModel: InputAddressViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,7 +46,7 @@ class MainFragment : Fragment(), AndroidScopeComponent {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainUI(viewModel: MainViewModel) {
+fun MainUI(viewModel: InputAddressViewModel) {
     val uiState = viewModel.uiState
     Column(
         modifier = Modifier
@@ -79,6 +79,6 @@ fun MainUI(viewModel: MainViewModel) {
 @Composable
 fun MainFragmentPreview() {
     MainUI(
-        MainViewModel(Router())
+        InputAddressViewModel(Router())
     )
 }
