@@ -1,5 +1,7 @@
-package com.lumi.ethtest.data
+package com.lumi.ethtest.data.network
 
+import com.lumi.ethtest.data.EthApiResponse
+import com.lumi.ethtest.data.TransactionResponse
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -39,5 +41,5 @@ interface Api {
         @Query("offset") offset: Int = 100,
         @Query("sort") sort: String = "asc",
         @Query("apikey") apikey: String = API_KEY,
-    ): ApiResponse<List<TransactionResponse>>
+    ): EthApiResponse<List<TransactionResponse>>
 }

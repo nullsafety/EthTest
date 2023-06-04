@@ -1,4 +1,4 @@
-package com.lumi.ethtest.presentation.viewmodel
+package com.lumi.ethtest.presentation.state
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf

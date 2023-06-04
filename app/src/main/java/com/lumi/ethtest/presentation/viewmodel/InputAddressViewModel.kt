@@ -3,6 +3,7 @@ package com.lumi.ethtest.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import com.github.terrakok.cicerone.Router
 import com.lumi.ethtest.presentation.Screens
+import com.lumi.ethtest.presentation.state.InputAddressUiState
 import org.bouncycastle.jcajce.provider.digest.Keccak
 
 class InputAddressViewModel(private val router: Router) : ViewModel() {

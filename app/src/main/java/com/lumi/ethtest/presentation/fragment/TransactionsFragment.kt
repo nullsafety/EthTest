@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,16 +13,21 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import com.lumi.ethtest.presentation.state.LoadingState
 import com.lumi.ethtest.presentation.viewmodel.TransactionsViewModel
+import com.lumi.ethtest.ui.util.AppStrings
 import com.lumi.ethtest.ui.util.commonPadding
 import com.lumi.ethtest.ui.util.convertTimestampToDate
 import com.lumi.ethtest.ui.util.setAppThemeContent
@@ -65,50 +71,68 @@ class TransactionsFragment : Fragment(), AndroidScopeComponent {
 @Composable
 fun TransactionsUI(viewModel: TransactionsViewModel) {
     val uiState = viewModel.uiState
-    if (uiState.isLoading.value) {
-        Column {
-            LinearProgressIndicator(
-                Modifier
-                    .height(2.dp)
-                    .fillMaxWidth()
-            )
-        }
-    } else {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = commonPadding)
-        ) {
-            items(
-                items = uiState.transactions.value
-            ) { transaction ->
-                Card(
-                    modifier = Modifier
+    when (uiState.loadingState.value) {
+        LoadingState.Loading -> {
+            Column {
+                LinearProgressIndicator(
+                    Modifier
+                        .height(2.dp)
                         .fillMaxWidth()
-                        .padding(horizontal = commonPadding)
-                        .clickable {
-
-                        }) {
-                    Column(Modifier.padding(all = commonPadding)) {
-                        TransactionLabelText(text = "Date")
-                        TransactionBodyText(
-                            text = transaction.date.toLong().convertTimestampToDate()
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        TransactionLabelText(text = "Sender address")
-                        TransactionBodyText(text = transaction.senderAddress)
-                        Spacer(modifier = Modifier.height(8.dp))
-                        TransactionLabelText(text = "Receiver address")
-                        TransactionBodyText(text = transaction.receiverAddress)
-                        Spacer(modifier = Modifier.height(8.dp))
-                        TransactionLabelText(text = "Eth Count")
-                        TransactionBodyText(text = transaction.ethCount)
-                        Spacer(modifier = Modifier.height(8.dp))
-                        TransactionLabelText(text = "Direction")
-                        TransactionBodyText(text = transaction.direction)
+                )
+            }
+        }
+        LoadingState.Failed -> {
+            Box(
+                contentAlignment = Alignment.BottomCenter,
+                modifier = Modifier.padding(all = commonPadding)
+            ) {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {
+                        viewModel.onRefreshClick()
                     }
+                ) {
+                    Text(text = stringResource(AppStrings.button_refresh))
                 }
-                Spacer(modifier = Modifier.height(16.dp))
+            }
+        }
+        LoadingState.Success -> {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = commonPadding)
+            ) {
+                items(
+                    items = uiState.transactions.value
+                ) { transaction ->
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = commonPadding)
+                            .clickable {
+
+                            }) {
+                        Column(Modifier.padding(all = commonPadding)) {
+                            TransactionLabelText(text = stringResource(AppStrings.date))
+                            TransactionBodyText(
+                                text = transaction.date.toLong().convertTimestampToDate()
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            TransactionLabelText(text = stringResource(AppStrings.sender_address))
+                            TransactionBodyText(text = transaction.senderAddress)
+                            Spacer(modifier = Modifier.height(8.dp))
+                            TransactionLabelText(text = stringResource(AppStrings.receiver_address))
+                            TransactionBodyText(text = transaction.receiverAddress)
+                            Spacer(modifier = Modifier.height(8.dp))
+                            TransactionLabelText(text = stringResource(AppStrings.eth_count))
+                            TransactionBodyText(text = transaction.ethCount)
+                            Spacer(modifier = Modifier.height(8.dp))
+                            TransactionLabelText(text = stringResource(AppStrings.direction))
+                            TransactionBodyText(text = transaction.direction)
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(commonPadding))
+                }
             }
         }
     }

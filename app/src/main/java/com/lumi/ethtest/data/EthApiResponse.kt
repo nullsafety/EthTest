@@ -1,7 +1,8 @@
 package com.lumi.ethtest.data
 
-data class ApiResponse<T>(
+data class EthApiResponse<T>(
     val status: String,
     val message: String,
     val result: T
 )
+

@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">EthTest</string>
+    <string name="date">Date</string>
+    <string name="sender_address">Sender address</string>
+    <string name="receiver_address">Receiver address</string>
+    <string name="eth_count">Eth Count</string>
+    <string name="direction">Direction</string>
+    <string name="button_refresh">Refresh</string>
 </resources>
