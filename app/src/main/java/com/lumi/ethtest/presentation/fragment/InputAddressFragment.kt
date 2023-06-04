@@ -40,13 +40,13 @@ class InputAddressFragment : Fragment(), AndroidScopeComponent {
         savedInstanceState: Bundle?
     ): View =
         setAppThemeContent {
-            MainUI(viewModel)
+            InputAddressUI(viewModel)
         }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainUI(viewModel: InputAddressViewModel) {
+fun InputAddressUI(viewModel: InputAddressViewModel) {
     val uiState = viewModel.uiState
     Column(
         modifier = Modifier
@@ -77,8 +77,8 @@ fun MainUI(viewModel: InputAddressViewModel) {
 
 @Preview
 @Composable
-fun MainFragmentPreview() {
-    MainUI(
+fun InputAddressFragmentPreview() {
+    InputAddressUI(
         InputAddressViewModel(Router())
     )
 }

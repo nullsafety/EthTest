@@ -2,6 +2,7 @@ package com.lumi.ethtest.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.github.terrakok.cicerone.Router
+import com.lumi.ethtest.presentation.Screens
 import org.bouncycastle.jcajce.provider.digest.Keccak
 
 class InputAddressViewModel(private val router: Router) : ViewModel() {
@@ -46,6 +47,6 @@ class InputAddressViewModel(private val router: Router) : ViewModel() {
     }
 
     fun onLoadClick() {
-        // TODO router.navigateTo(uiState.addressInput.value) list
+        router.navigateTo(Screens.transactionsScreen(uiState.addressInput.value))
     }
 }

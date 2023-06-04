@@ -3,6 +3,7 @@ package com.lumi.ethtest
 import android.app.Application
 import com.lumi.ethtest.di.appModule
 import com.lumi.ethtest.di.inputAddressFragmentModule
+import com.lumi.ethtest.di.transactionsFragmentModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.GlobalContext
@@ -17,6 +18,7 @@ class App: Application() {
             modules(
                 appModule,
                 inputAddressFragmentModule,
+                transactionsFragmentModule
             )
         }
     }
