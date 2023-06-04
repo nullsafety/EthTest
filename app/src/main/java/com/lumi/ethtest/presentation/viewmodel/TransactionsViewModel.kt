@@ -20,6 +20,7 @@ class TransactionsViewModel(
                 .map {
                     it.toTransactionUI(uiState.address.value)
                 }
+            uiState.isLoading.value = false
         }
     }
 }

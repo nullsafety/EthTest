@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -64,39 +65,51 @@ class TransactionsFragment : Fragment(), AndroidScopeComponent {
 @Composable
 fun TransactionsUI(viewModel: TransactionsViewModel) {
     val uiState = viewModel.uiState
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = commonPadding)
-    ) {
-        items(
-            items = uiState.transactions.value
-        ) { transaction ->
-            Card(
-                modifier = Modifier
+    if (uiState.isLoading.value) {
+        Column {
+            LinearProgressIndicator(
+                Modifier
+                    .height(2.dp)
                     .fillMaxWidth()
-                    .padding(horizontal = commonPadding)
-                    .clickable {
+            )
+        }
+    } else {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = commonPadding)
+        ) {
+            items(
+                items = uiState.transactions.value
+            ) { transaction ->
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = commonPadding)
+                        .clickable {
 
-                    }) {
-                Column(Modifier.padding(all = commonPadding)) {
-                    TransactionLabelText(text = "Date")
-                    TransactionBodyText(text = transaction.date.toLong().convertTimestampToDate())
-                    Spacer(modifier = Modifier.height(8.dp))
-                    TransactionLabelText(text = "Sender address")
-                    TransactionBodyText(text = transaction.senderAddress)
-                    Spacer(modifier = Modifier.height(8.dp))
-                    TransactionLabelText(text = "Receiver address")
-                    TransactionBodyText(text = transaction.receiverAddress)
-                    Spacer(modifier = Modifier.height(8.dp))
-                    TransactionLabelText(text = "Eth Count")
-                    TransactionBodyText(text = transaction.ethCount)
-                    Spacer(modifier = Modifier.height(8.dp))
-                    TransactionLabelText(text = "Direction")
-                    TransactionBodyText(text = transaction.direction)
+                        }) {
+                    Column(Modifier.padding(all = commonPadding)) {
+                        TransactionLabelText(text = "Date")
+                        TransactionBodyText(
+                            text = transaction.date.toLong().convertTimestampToDate()
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        TransactionLabelText(text = "Sender address")
+                        TransactionBodyText(text = transaction.senderAddress)
+                        Spacer(modifier = Modifier.height(8.dp))
+                        TransactionLabelText(text = "Receiver address")
+                        TransactionBodyText(text = transaction.receiverAddress)
+                        Spacer(modifier = Modifier.height(8.dp))
+                        TransactionLabelText(text = "Eth Count")
+                        TransactionBodyText(text = transaction.ethCount)
+                        Spacer(modifier = Modifier.height(8.dp))
+                        TransactionLabelText(text = "Direction")
+                        TransactionBodyText(text = transaction.direction)
+                    }
                 }
+                Spacer(modifier = Modifier.height(16.dp))
             }
-            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
