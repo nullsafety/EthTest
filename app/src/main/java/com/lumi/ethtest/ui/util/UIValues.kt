@@ -1,4 +1,4 @@
-package com.lumi.ethtest.ui.theme
+package com.lumi.ethtest.ui.util
 
 import androidx.compose.ui.unit.dp
 

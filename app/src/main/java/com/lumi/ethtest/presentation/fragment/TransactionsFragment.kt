@@ -21,8 +21,9 @@ import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.lumi.ethtest.presentation.viewmodel.TransactionsViewModel
-import com.lumi.ethtest.ui.theme.commonPadding
-import com.lumi.ethtest.ui.theme.setAppThemeContent
+import com.lumi.ethtest.ui.util.commonPadding
+import com.lumi.ethtest.ui.util.convertTimestampToDate
+import com.lumi.ethtest.ui.util.setAppThemeContent
 import org.koin.android.scope.AndroidScopeComponent
 import org.koin.androidx.scope.fragmentScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -33,6 +34,13 @@ class TransactionsFragment : Fragment(), AndroidScopeComponent {
     override val scope: Scope by fragmentScope()
 
     private val viewModel: TransactionsViewModel by viewModel()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.init(
+            requireArguments().getString(ADDRESS_KEY)
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,8 +70,8 @@ fun TransactionsUI(viewModel: TransactionsViewModel) {
             .padding(top = commonPadding)
     ) {
         items(
-            items = listOf("", "", "", "", "", "")
-        ) {
+            items = uiState.transactions.value
+        ) { transaction ->
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -73,19 +81,19 @@ fun TransactionsUI(viewModel: TransactionsViewModel) {
                     }) {
                 Column(Modifier.padding(all = commonPadding)) {
                     TransactionLabelText(text = "Date")
-                    TransactionBodyText(text = "02.01.21")
+                    TransactionBodyText(text = transaction.date.toLong().convertTimestampToDate())
                     Spacer(modifier = Modifier.height(8.dp))
                     TransactionLabelText(text = "Sender address")
-                    TransactionBodyText(text = "yxyxyxyx")
+                    TransactionBodyText(text = transaction.senderAddress)
                     Spacer(modifier = Modifier.height(8.dp))
                     TransactionLabelText(text = "Receiver address")
-                    TransactionBodyText(text = "yxyxyxyx")
+                    TransactionBodyText(text = transaction.receiverAddress)
                     Spacer(modifier = Modifier.height(8.dp))
                     TransactionLabelText(text = "Eth Count")
-                    TransactionBodyText(text = "999")
+                    TransactionBodyText(text = transaction.ethCount)
                     Spacer(modifier = Modifier.height(8.dp))
                     TransactionLabelText(text = "Direction")
-                    TransactionBodyText(text = "in/out")
+                    TransactionBodyText(text = transaction.direction)
                 }
             }
             Spacer(modifier = Modifier.height(16.dp))

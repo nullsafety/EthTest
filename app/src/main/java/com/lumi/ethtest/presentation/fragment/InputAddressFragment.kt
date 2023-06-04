@@ -22,8 +22,8 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import com.github.terrakok.cicerone.Router
 import com.lumi.ethtest.presentation.viewmodel.InputAddressViewModel
-import com.lumi.ethtest.ui.theme.commonPadding
-import com.lumi.ethtest.ui.theme.setAppThemeContent
+import com.lumi.ethtest.ui.util.commonPadding
+import com.lumi.ethtest.ui.util.setAppThemeContent
 import org.koin.android.scope.AndroidScopeComponent
 import org.koin.androidx.scope.fragmentScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
