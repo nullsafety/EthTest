@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import com.github.terrakok.cicerone.Router
 import com.lumi.ethtest.presentation.viewmodel.InputAddressViewModel
+import com.lumi.ethtest.ui.theme.commonPadding
 import com.lumi.ethtest.ui.theme.setAppThemeContent
 import org.koin.android.scope.AndroidScopeComponent
 import org.koin.androidx.scope.fragmentScope
@@ -62,7 +63,7 @@ fun InputAddressUI(viewModel: InputAddressViewModel) {
                 uiState.loadButtonEnabled.value = viewModel.isValidAddress(it)
             }
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(commonPadding))
         Button(
             modifier = Modifier.fillMaxWidth(),
             enabled = uiState.loadButtonEnabled.value,
