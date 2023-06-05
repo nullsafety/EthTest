@@ -39,4 +39,8 @@ class TransactionsViewModel(
     }
 
     fun onRefreshClick() = loadTransactions()
+
+    fun onTransactionClick(transaction: TransactionUIModel) {
+        uiState.selectedTransaction.value = transaction
+    }
 }

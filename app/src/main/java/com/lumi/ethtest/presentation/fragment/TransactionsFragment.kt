@@ -11,25 +11,37 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.lumi.ethtest.presentation.state.LoadingState
+import com.lumi.ethtest.presentation.viewmodel.TransactionUIModel
 import com.lumi.ethtest.presentation.viewmodel.TransactionsViewModel
 import com.lumi.ethtest.ui.util.AppStrings
 import com.lumi.ethtest.ui.util.commonPadding
 import com.lumi.ethtest.ui.util.convertTimestampToDate
+import com.lumi.ethtest.ui.util.dialogMaxWidth
+import com.lumi.ethtest.ui.util.dialogMinWidth
+import com.lumi.ethtest.ui.util.dialogPadding
+import com.lumi.ethtest.ui.util.dialogTitlePadding
 import com.lumi.ethtest.ui.util.setAppThemeContent
 import org.koin.android.scope.AndroidScopeComponent
 import org.koin.androidx.scope.fragmentScope
@@ -71,6 +83,12 @@ class TransactionsFragment : Fragment(), AndroidScopeComponent {
 @Composable
 fun TransactionsUI(viewModel: TransactionsViewModel) {
     val uiState = viewModel.uiState
+    val openDialog = remember { mutableStateOf(false) }
+    if (openDialog.value) {
+        uiState.selectedTransaction.value?.let {
+            TransactionDialog(openDialog, it)
+        }
+    }
     when (uiState.loadingState.value) {
         LoadingState.Loading -> {
             Column {
@@ -81,6 +99,7 @@ fun TransactionsUI(viewModel: TransactionsViewModel) {
                 )
             }
         }
+
         LoadingState.Failed -> {
             Box(
                 contentAlignment = Alignment.BottomCenter,
@@ -96,6 +115,7 @@ fun TransactionsUI(viewModel: TransactionsViewModel) {
                 }
             }
         }
+
         LoadingState.Success -> {
             LazyColumn(
                 modifier = Modifier
@@ -110,7 +130,8 @@ fun TransactionsUI(viewModel: TransactionsViewModel) {
                             .fillMaxWidth()
                             .padding(horizontal = commonPadding)
                             .clickable {
-
+                                viewModel.onTransactionClick(transaction)
+                                openDialog.value = true
                             }) {
                         Column(Modifier.padding(all = commonPadding)) {
                             TransactionLabelText(text = stringResource(AppStrings.date))
@@ -132,6 +153,45 @@ fun TransactionsUI(viewModel: TransactionsViewModel) {
                         }
                     }
                     Spacer(modifier = Modifier.height(commonPadding))
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun TransactionDialog(openDialog: MutableState<Boolean>, transaction: TransactionUIModel) {
+    Dialog(
+        onDismissRequest = {
+            openDialog.value = false
+        }
+    ) {
+        Card(
+            Modifier
+                .sizeIn(minWidth = dialogMinWidth, maxWidth = dialogMaxWidth)
+                .padding(dialogPadding)
+        ) {
+            val scroll = rememberScrollState()
+            Column(Modifier.padding(horizontal = commonPadding)) {
+                Text(
+                    modifier = Modifier.padding(dialogTitlePadding),
+                    fontSize = MaterialTheme.typography.headlineMedium.fontSize,
+                    text = stringResource(AppStrings.input_title))
+                Text(
+                    modifier = Modifier
+                        .sizeIn(maxHeight = 200.dp)
+                        .verticalScroll(scroll),
+                    text = transaction.input
+                )
+
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = commonPadding, top = commonPadding),
+                    onClick = {
+                        openDialog.value = false
+                    }) {
+                    Text(stringResource(AppStrings.ok_button))
                 }
             }
         }
