@@ -1,5 +1,6 @@
 package com.lumi.ethtest.data.network
 
+import com.lumi.ethtest.data.ContractResponse
 import com.lumi.ethtest.data.EthApiResponse
 import com.lumi.ethtest.data.TransactionResponse
 import okhttp3.OkHttpClient
@@ -39,7 +40,15 @@ interface Api {
         @Query("endblock") endblock: Int = 99999999,
         @Query("page") page: Int = 1,
         @Query("offset") offset: Int = 100,
-        @Query("sort") sort: String = "asc",
+        @Query("sort") sort: String = "desc",
         @Query("apikey") apikey: String = API_KEY,
     ): EthApiResponse<List<TransactionResponse>>
+
+    @GET("api")
+    suspend fun getContractSourceCode(
+        @Query("address") address: String,
+        @Query("module") module: String = "contract",
+        @Query("action") action: String = "getsourcecode",
+        @Query("apikey") apikey: String = API_KEY,
+    ): EthApiResponse<List<ContractResponse>>
 }

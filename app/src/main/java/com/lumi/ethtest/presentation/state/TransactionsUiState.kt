@@ -6,6 +6,7 @@ import com.lumi.ethtest.presentation.viewmodel.TransactionUIModel
 
 data class TransactionsUiState(
     val address: MutableState<String> = mutableStateOf(""),
+    val abi: MutableState<String> = mutableStateOf(""),
     val selectedTransaction: MutableState<TransactionUIModel?> = mutableStateOf(null),
     val loadingState: MutableState<LoadingState> = mutableStateOf(LoadingState.Loading),
     val transactions: MutableState<List<TransactionUIModel>> = mutableStateOf(listOf())
