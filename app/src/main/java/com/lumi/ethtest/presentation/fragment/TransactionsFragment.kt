@@ -18,6 +18,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -89,8 +90,8 @@ fun TransactionsUI(viewModel: TransactionsViewModel) {
             TransactionDialog(openDialog, it)
         }
     }
-    when (uiState.loadingState.value) {
-        LoadingState.Loading -> {
+    when (val loadingState = uiState.loadingState.value) {
+        is LoadingState.Loading -> {
             Column {
                 LinearProgressIndicator(
                     Modifier
@@ -100,23 +101,39 @@ fun TransactionsUI(viewModel: TransactionsViewModel) {
             }
         }
 
-        LoadingState.Failed -> {
+        is LoadingState.Failed -> {
             Box(
                 contentAlignment = Alignment.BottomCenter,
-                modifier = Modifier.padding(all = commonPadding)
+                modifier = Modifier
+                    .padding(all = commonPadding)
             ) {
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = {
-                        viewModel.onRefreshClick()
+                Column {
+                    Card(
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.error
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = commonPadding)
+                    ) {
+                        Text(
+                            modifier = Modifier.padding(all = commonPadding),
+                            text = loadingState.errorMessage
+                        )
                     }
-                ) {
-                    Text(text = stringResource(AppStrings.button_refresh))
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                            viewModel.onRefreshClick()
+                        }
+                    ) {
+                        Text(text = stringResource(AppStrings.button_refresh))
+                    }
                 }
             }
         }
 
-        LoadingState.Success -> {
+        is LoadingState.Success -> {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -176,7 +193,8 @@ fun TransactionDialog(openDialog: MutableState<Boolean>, transaction: Transactio
                 Text(
                     modifier = Modifier.padding(dialogTitlePadding),
                     fontSize = MaterialTheme.typography.headlineMedium.fontSize,
-                    text = stringResource(AppStrings.transaction_dialog_input_title))
+                    text = stringResource(AppStrings.transaction_dialog_input_title)
+                )
                 Text(
                     modifier = Modifier
                         .sizeIn(maxHeight = 200.dp)
@@ -187,7 +205,8 @@ fun TransactionDialog(openDialog: MutableState<Boolean>, transaction: Transactio
                     Text(
                         modifier = Modifier.padding(vertical = commonPadding),
                         fontSize = MaterialTheme.typography.headlineSmall.fontSize,
-                        text = stringResource(AppStrings.transaction_dialog_decoded_function))
+                        text = stringResource(AppStrings.transaction_dialog_decoded_function)
+                    )
                     Text(text = function.toString())
                 }
 

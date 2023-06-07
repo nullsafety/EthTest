@@ -19,6 +19,7 @@ import org.web3j.abi.datatypes.Address
 import org.web3j.abi.datatypes.Function
 import org.web3j.abi.datatypes.Type
 import org.web3j.abi.datatypes.generated.Uint256
+import java.lang.RuntimeException
 
 
 class TransactionsViewModel(
@@ -40,11 +41,11 @@ class TransactionsViewModel(
                     uiState.transactions.value = response.data.result.map {
                         it.toTransactionUI(uiState.address.value)
                     }
+                    uiState.loadingState.value = LoadingState.Success
                 }
                 .isError {
-                    uiState.loadingState.value = LoadingState.Failed
+                    uiState.loadingState.value = LoadingState.Failed(it.error)
                 }
-            uiState.loadingState.value = LoadingState.Success
         }
     }
 
@@ -103,7 +104,11 @@ class TransactionsViewModel(
     fun onRefreshClick() = loadTransactions()
 
     fun onTransactionClick(transaction: TransactionUIModel) {
-        val decodedFunction = decodeTransactionInput(transaction.input)
+        val decodedFunction = try {
+            decodeTransactionInput(transaction.input)
+        } catch (e: RuntimeException) {
+            EmptyFunction()
+        }
         uiState.selectedTransaction.value = transaction.copy(decodedFunction = decodedFunction)
     }
 }
