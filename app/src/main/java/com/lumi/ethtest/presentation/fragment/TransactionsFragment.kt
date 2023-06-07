@@ -134,21 +134,21 @@ fun TransactionsUI(viewModel: TransactionsViewModel) {
                                 openDialog.value = true
                             }) {
                         Column(Modifier.padding(all = commonPadding)) {
-                            TransactionLabelText(text = stringResource(AppStrings.date))
+                            TransactionLabelText(text = stringResource(AppStrings.transaction_card_date))
                             TransactionBodyText(
                                 text = transaction.date.toLong().convertTimestampToDate()
                             )
                             Spacer(modifier = Modifier.height(8.dp))
-                            TransactionLabelText(text = stringResource(AppStrings.sender_address))
+                            TransactionLabelText(text = stringResource(AppStrings.transaction_card_sender_address))
                             TransactionBodyText(text = transaction.senderAddress)
                             Spacer(modifier = Modifier.height(8.dp))
-                            TransactionLabelText(text = stringResource(AppStrings.receiver_address))
+                            TransactionLabelText(text = stringResource(AppStrings.transaction_card_receiver_address))
                             TransactionBodyText(text = transaction.receiverAddress)
                             Spacer(modifier = Modifier.height(8.dp))
-                            TransactionLabelText(text = stringResource(AppStrings.eth_count))
+                            TransactionLabelText(text = stringResource(AppStrings.transaction_card_eth_count))
                             TransactionBodyText(text = transaction.ethCount)
                             Spacer(modifier = Modifier.height(8.dp))
-                            TransactionLabelText(text = stringResource(AppStrings.direction))
+                            TransactionLabelText(text = stringResource(AppStrings.transaction_card_direction))
                             TransactionBodyText(text = transaction.direction)
                         }
                     }
@@ -176,13 +176,20 @@ fun TransactionDialog(openDialog: MutableState<Boolean>, transaction: Transactio
                 Text(
                     modifier = Modifier.padding(dialogTitlePadding),
                     fontSize = MaterialTheme.typography.headlineMedium.fontSize,
-                    text = stringResource(AppStrings.input_title))
+                    text = stringResource(AppStrings.transaction_dialog_input_title))
                 Text(
                     modifier = Modifier
                         .sizeIn(maxHeight = 200.dp)
                         .verticalScroll(scroll),
                     text = transaction.input
                 )
+                transaction.decodedFunction?.let { function ->
+                    Text(
+                        modifier = Modifier.padding(vertical = commonPadding),
+                        fontSize = MaterialTheme.typography.headlineSmall.fontSize,
+                        text = stringResource(AppStrings.transaction_dialog_decoded_function))
+                    Text(text = function.toString())
+                }
 
                 Button(
                     modifier = Modifier
@@ -191,7 +198,7 @@ fun TransactionDialog(openDialog: MutableState<Boolean>, transaction: Transactio
                     onClick = {
                         openDialog.value = false
                     }) {
-                    Text(stringResource(AppStrings.ok_button))
+                    Text(stringResource(AppStrings.button_ok))
                 }
             }
         }
