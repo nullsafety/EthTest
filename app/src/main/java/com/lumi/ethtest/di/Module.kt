@@ -28,7 +28,7 @@ val inputAddressFragmentModule = module {
 
 val transactionsFragmentModule = module {
     scope<TransactionsFragment> {
-        viewModel { TransactionsViewModel(get()) }
+        viewModel { params -> TransactionsViewModel(repository = get(), address = params.get()) }
         scoped <TransactionsRepository> { TransactionsRepositoryImpl(get()) }
     }
 }

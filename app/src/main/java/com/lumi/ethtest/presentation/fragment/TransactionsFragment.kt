@@ -47,20 +47,16 @@ import com.lumi.ethtest.ui.util.setAppThemeContent
 import org.koin.android.scope.AndroidScopeComponent
 import org.koin.androidx.scope.fragmentScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import org.koin.core.scope.Scope
 
 class TransactionsFragment : Fragment(), AndroidScopeComponent {
 
     override val scope: Scope by fragmentScope()
 
-    private val viewModel: TransactionsViewModel by viewModel()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.init(
-            requireArguments().getString(ADDRESS_KEY)
-        )
-    }
+    private val viewModel: TransactionsViewModel by viewModel(
+        parameters = { parametersOf(requireArguments().getString(ADDRESS_KEY)) }
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater,

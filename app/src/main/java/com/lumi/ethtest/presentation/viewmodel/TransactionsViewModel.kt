@@ -23,13 +23,14 @@ import java.lang.RuntimeException
 
 
 class TransactionsViewModel(
+    address: String,
     private val repository: TransactionsRepository,
 ) : ViewModel() {
 
     val uiState: TransactionsUiState = TransactionsUiState()
 
-    fun init(address: String?) {
-        uiState.address.value = address ?: ""
+    init {
+        uiState.address.value = address
         loadTransactions()
     }
 
